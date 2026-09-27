@@ -2,10 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\ContactInquiry;
 use App\Models\Equipment;
-use App\Models\Post;
-use App\Models\ProjectReference;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -54,6 +51,29 @@ class WebsiteAndAdminTest extends TestCase
         $response->assertSee('Polycarbonate Sheets');
         $response->assertSee('Spare Parts & Maintenance Supplies');
         $response->assertSee('31');
+        $response->assertSee('equipmentLightbox');
+        $response->assertSee('View Gallery');
+    }
+
+    public function test_equipment_model_supports_feature_image_and_gallery(): void
+    {
+        $equipment = Equipment::create([
+            'code' => '99',
+            'title' => 'Advanced Climate Sensor',
+            'description' => 'Precision temperature and humidity monitoring unit.',
+            'feature_image' => 'equipment/sensor.jpg',
+            'gallery' => ['equipment/gallery/sensor1.jpg', 'equipment/gallery/sensor2.jpg'],
+            'sort_order' => 99,
+            'is_active' => true,
+        ]);
+
+        $this->assertEquals('equipment/sensor.jpg', $equipment->feature_image);
+        $this->assertEquals('equipment/sensor.jpg', $equipment->featured_image);
+        $this->assertIsArray($equipment->gallery);
+        $this->assertCount(2, $equipment->gallery);
+        $this->assertStringContainsString('equipment/sensor.jpg', $equipment->feature_image_url);
+        $this->assertCount(2, $equipment->gallery_urls);
+        $this->assertStringContainsString('equipment/gallery/sensor1.jpg', $equipment->gallery_urls[0]);
     }
 
     public function test_blog_post_page_loads_with_author_and_content(): void

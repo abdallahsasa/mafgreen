@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\ContactInquiry;
 use App\Models\Equipment;
 use App\Models\Post;
 use App\Models\ProjectReference;
@@ -58,12 +57,41 @@ class DatabaseSeeder extends Seeder
             ['code' => '31', 'title' => 'Spare Parts & Maintenance Supplies', 'description' => 'Replacement bearings, belts, filters, nozzles, tools, and consumables for routine greenhouse maintenance and repairs.'],
         ];
 
+        $sampleImages = [
+            'assets/1.jpg',
+            'assets/2.jpg',
+            'assets/3.jpg',
+            'assets/4.jpg',
+            'assets/5.jpg',
+            'assets/6.jpg',
+            'assets/7.jpg',
+            'assets/8.jpg',
+            'assets/9.jpg',
+            'assets/10.jpg',
+            'assets/11.jpg',
+            'assets/12.jpg',
+            'assets/13.jpg',
+            'assets/catalog-pages/page-1.png',
+            'assets/catalog-pages/page-2.png',
+            'assets/catalog-pages/page-3.png',
+            'assets/catalog-pages/page-4.png',
+            'assets/catalog-pages/page-5.png',
+            'assets/catalog-pages/page-6.png',
+        ];
+
         foreach ($equipmentItems as $index => $item) {
+            $featImg = $sampleImages[$index % count($sampleImages)];
+            $gallImg1 = $sampleImages[($index + 1) % count($sampleImages)];
+            $gallImg2 = $sampleImages[($index + 2) % count($sampleImages)];
+            $gallery = [$featImg, $gallImg1, $gallImg2];
+
             Equipment::updateOrCreate(
                 ['code' => $item['code']],
                 [
                     'title' => $item['title'],
                     'description' => $item['description'],
+                    'feature_image' => $featImg,
+                    'gallery' => $gallery,
                     'sort_order' => $index + 1,
                     'is_active' => true,
                 ]
